@@ -1,0 +1,80 @@
+import java.util.Scanner;
+
+public class Main {
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        double balance = 0.00;
+        boolean isRunning = true;
+        String userName = "xyz";
+        int pass = 123;
+
+        while (isRunning) {
+            System.out.println(" *** Welcome to Online Banking ***");
+            System.out.print("Enter your UserName: ");
+            String uN = scanner.nextLine();
+            System.out.print("Enter your Password: ");
+            int pS = scanner.nextInt();
+            scanner.nextLine();
+
+            if (LoginCredentials(userName, pass, uN, pS)) {
+                System.out.println("You have successfully logged in.");
+                int choice;
+                do {
+                    System.out.println("Enter your choice:\n 1 Balance    2 Deposit\n 3 Withdraw   4 Exit");
+                    choice = scanner.nextInt();
+                    scanner.nextLine();
+
+                    switch (choice) {
+                        case 1 -> showBalance(balance);
+                        case 2 -> balance += deposit();
+                        case 3 -> balance = withdraw(balance);
+                        case 4 -> {
+                            System.out.println("Exiting...");
+                            isRunning = false;
+                        }
+                        default -> System.out.println("Invalid choice. Please try again.");
+                    }
+                } while (choice != 4);
+            } else {
+                System.out.println("Error: Incorrect username or password. Please try again.");
+            }
+        }
+        scanner.close();
+    }
+
+    static boolean LoginCredentials(String userName, int pass, String uN, int pS) {
+        return userName.equals(uN) && pass == pS;
+    }
+
+    static void showBalance(double balance) {
+        System.out.println("Your current balance is: $" + balance);
+    }
+
+    static double deposit() {
+        System.out.print("Enter the amount to be deposited: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        if (amount > 0) {
+            System.out.println("$" + amount + " deposited successfully.");
+            return amount;
+        } else {
+            System.out.println("Invalid amount. Deposit failed.");
+            return 0;
+        }
+    }
+
+
+    static double withdraw(double balance) {
+        System.out.print("Enter the amount to withdraw: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        if (amount > 0 && amount <= balance) {
+            System.out.println("$" + amount + " withdrawn successfully.");
+            return balance - amount;
+        } else {
+            System.out.println("Invalid amount or insufficient balance. Withdrawal failed.");
+            return balance;
+        }
+    }
+}
